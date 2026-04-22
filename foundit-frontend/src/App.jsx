@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import Dashboard from './pages/Dashboard';
 import ReportItem from './pages/ReportItem';
 import BrowseItems from './pages/BrowseItems';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="report-lost" element={<ReportItem type="lost" />} />
           <Route path="report-found" element={<ReportItem type="found" />} />
           <Route path="browse" element={<BrowseItems />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </Router>

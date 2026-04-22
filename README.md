@@ -1,13 +1,66 @@
-# Foundit: Lost and Found System for University of San Agustin
+# FoundiT | University of San Agustin Lost & Found
 
-![Status](https://img.shields.io/badge/Status-Active_Development-brightgreen)
+FoundiT is a modern, high-fidelity lost and found management system designed specifically for the University of San Agustin. It streamlines the recovery of misplaced items within the campus ecosystem through a centralized, community-driven platform.
+
+![Status](https://img.shields.io/badge/Status-Overhauled-usa--maroon)
 
 ---
 
-## Project Meaning & Scope
+## 🚀 Core Features
 
-Foundit is an intuitive, digital-first lost and found management system designed to streamline the recovery of misplaced items within the school ecosystem. In school, Students often lose their belongings such as identification cards, pens, and notebooks. In many cases, these items are not returned because there is no proper system for reporting and tracking them. The proposed Lost and Found System aims to solve this problem by providing a simple and organized way for students and staff to report lost and found items. By storing all records in one system, it becomes easier to match lost items with found items and
-return them to their rightful owners.
+- **Real-Time Dashboard**: Live tracking of lost and found items.
+- **Photo-Driven Reporting**: Integrated image uploads to help identify items quickly.
+- **Community Gallery**: Simple search and filter interface for browsing listings.
+- **Brand Aligned**: Designed with University of San Agustin (USA) academic aesthetics.
+- **Cloud Powered**: Direct integration with Supabase for real-time data and storage.
 
-* **Target Users:** The system will support University Students, Professors, University Staff, and System Administrators.
-* **Lost and Found:** "Status Dashboard" where students can see if they have pending items to collect, fees to pay for lost school property, or items they reported that have finally been "matched."
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: React.js with Vite
+- **Styling**: Tailwind CSS (USA Maroon & Gold Theme)
+- **Backend/DB**: Supabase (Database & Storage)
+- **Icons**: Lucide React
+
+---
+
+## 💻 Getting Started
+
+### 1. Prerequisites
+- Node.js (v18+)
+- Supabase Account
+
+### 2. Setup Database
+Run the provided `supabase_setup.sql` script in your Supabase SQL Editor to initialize the required tables and security policies.
+
+### 3. Environment Variables
+Create a `.env` file in the `foundit-frontend` directory:
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 4. Installation
+```bash
+cd foundit-frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🏛 Architecture
+The system has been overhauled to use a modern direct-to-database architecture. The frontend communicates directly with Supabase, reducing latency and simplifying the codebase. 
+
+- **Storage**: All item photos are stored in the `item-images` bucket.
+- **Database**: Records are stored in `LostItems` and `FoundItems` tables.
+
+---
+
+## 🎨 Branding
+- **USA Maroon**: `#800000`
+- **USA Gold**: `#FFD700`
+
+---
+© 2026 University of San Agustin - FoundiT System

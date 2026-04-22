@@ -59,7 +59,7 @@ export default function Dashboard() {
           <div className="hidden lg:block relative h-full min-h-[500px]">
             <div className="absolute inset-0 bg-usa-maroon/5 dark:bg-usa-gold/5" />
             <img 
-              src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop" 
+              src="/assets/university_bg.png" 
               alt="University Campus" 
               className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 dark:mix-blend-normal dark:opacity-40"
             />
