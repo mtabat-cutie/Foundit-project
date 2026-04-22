@@ -53,5 +53,23 @@ CREATE POLICY "Public Insert Access" ON public."LostItems" FOR INSERT WITH CHECK
 CREATE POLICY "Public Insert Access" ON public."FoundItems" FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public Insert Access" ON public."Claims" FOR INSERT WITH CHECK (true);
 
--- 6. Note on Storage
+-- 6. Create Profiles table for extended user data
+CREATE TABLE IF NOT EXISTS public."Profiles" (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  full_name TEXT NOT NULL,
+  university_id TEXT UNIQUE NOT NULL,
+  email TEXT NOT NULL
+);
+
+-- 7. Enable RLS for Profiles
+ALTER TABLE public."Profiles" ENABLE ROW LEVEL SECURITY;
+
+-- 8. Create Profiles Policies
+CREATE POLICY "Users can view their own profile" ON public."Profiles" FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "Users can update their own profile" ON public."Profiles" FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Public profiles are visible to all users (optional)" ON public."Profiles" FOR SELECT USING (true);
+CREATE POLICY "Enable insert for authenticated users only" ON public."Profiles" FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- 9. Note on Storage
 -- Ensure you have a storage bucket named 'item-images' with public access enabled.

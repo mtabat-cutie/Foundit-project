@@ -168,12 +168,12 @@ export default function Landing() {
             </div>
           </div>
 
-          <button 
-            type="button"
+          <Link 
+            to="/register"
             className="w-full py-4 rounded-xl border-2 border-zinc-200 dark:border-dark-700 hover:border-usa-maroon dark:hover:border-usa-gold bg-transparent text-zinc-900 dark:text-white font-black text-lg transition-all active:scale-[0.98] flex items-center justify-center gap-3 group"
           >
             Create your account <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform text-usa-maroon dark:text-usa-gold" />
-          </button>
+          </Link>
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-8">
             <a href="#" className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 hover:text-usa-maroon dark:hover:text-usa-gold transition-colors">Privacy Policy</a>

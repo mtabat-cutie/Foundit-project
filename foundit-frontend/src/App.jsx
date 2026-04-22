@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import ReportItem from './pages/ReportItem';
 import BrowseItems from './pages/BrowseItems';
 import Landing from './pages/Landing';
+import Register from './pages/Register';
 import SignOut from './pages/SignOut';
 import NotFound from './pages/NotFound';
 
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Landing />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/signed-out" element={<SignOut />} />
 
         {/* Protected Routes Wrapper */}
