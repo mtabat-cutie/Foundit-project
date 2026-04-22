@@ -25,42 +25,7 @@ FoundiT is a modern, high-fidelity lost and found management system designed spe
 
 ---
 
-## 💻 Getting Started
-
-### 1. Prerequisites
-- Node.js (v18+)
-- Supabase Account
-
-### 2. Setup Database
-Run the provided `supabase_setup.sql` script in your Supabase SQL Editor to initialize the required tables and security policies.
-
-### 3. Environment Variables
-Create a `.env` file in the `foundit-frontend` directory:
-```env
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### 4. Installation
-```bash
-cd foundit-frontend
-npm install
-npm run dev
-```
-
----
-
 ## 🏛 Architecture
 The system has been overhauled to use a modern direct-to-database architecture. The frontend communicates directly with Supabase, reducing latency and simplifying the codebase. 
 
-- **Storage**: All item photos are stored in the `item-images` bucket.
-- **Database**: Records are stored in `LostItems` and `FoundItems` tables.
 
----
-
-## 🎨 Branding
-- **USA Maroon**: `#800000`
-- **USA Gold**: `#FFD700`
-
----
-© 2026 University of San Agustin - FoundiT System
