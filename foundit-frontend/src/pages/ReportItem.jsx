@@ -50,15 +50,24 @@ export default function ReportItem({ type = 'lost' }) {
 
       // 1. Upload Image to Supabase Storage if exists
       if (imageFile) {
+        // Ensure bucket exists and is public
         const fileExt = imageFile.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
         const filePath = `${isLost ? 'lost' : 'found'}/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('item-images')
-          .upload(filePath, imageFile);
+          .upload(filePath, imageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {
+          if (uploadError.message.includes('bucket not found')) {
+            throw new Error('Storage bucket "item-images" not found. Please create it in your Supabase dashboard.');
+          }
+          throw uploadError;
+        }
 
         const { data: { publicUrl } } = supabase.storage
           .from('item-images')
