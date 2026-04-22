@@ -1,103 +1,133 @@
 import { useEffect, useState } from 'react';
 import { getLostItems, getFoundItems } from '../services/api';
+import { Search, Filter, RefreshCcw, PackageSearch } from 'lucide-react';
+import ItemCard from '../components/ItemCard';
 
 export default function BrowseItems() {
-  const [lostItems, setLostItems] = useState([]);
-  const [foundItems, setFoundItems] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('lost');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [lostRes, foundRes] = await Promise.all([getLostItems(), getFoundItems()]);
+      
+      // Normalize data for consistent rendering
+      const normalizedLost = lostRes.data.map(item => ({
+        ...item,
+        name: item.item_name,
+        location: item.place_lost,
+        date: item.date_lost,
+        type: 'lost'
+      }));
+      
+      const normalizedFound = foundRes.data.map(item => ({
+        ...item,
+        name: item.item_name,
+        location: item.location_found,
+        date: item.date_found,
+        type: 'found'
+      }));
+      
+      setItems([...normalizedLost, ...normalizedFound]);
+    } catch (err) {
+      console.error("Error fetching items:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [lostRes, foundRes] = await Promise.all([getLostItems(), getFoundItems()]);
-        setLostItems(lostRes.data);
-        setFoundItems(foundRes.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 
-  if (loading) return <div className="text-zinc-400">Loading data...</div>;
+  const filteredItems = items.filter(item => 
+    item.type === activeTab && 
+    (item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+     item.location.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
-      <div>
-        <h2 className="text-3xl font-bold text-zinc-100">Viewing Module</h2>
-        <p className="text-zinc-400 mt-2">Browse all reported and found items across the school.</p>
+    <div className="space-y-8 pb-20">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h2 className="text-4xl font-black dark:text-white">Community <span className="text-usa-maroon dark:text-usa-gold">Gallery</span></h2>
+          <p className="mt-2 text-zinc-500 dark:text-zinc-400">Search and browse through all reported items in the university.</p>
+        </div>
+        
+        <button 
+          onClick={fetchData}
+          className="flex items-center gap-2 text-sm font-bold text-usa-maroon dark:text-usa-gold hover:opacity-80 transition-opacity"
+        >
+          <RefreshCcw size={16} className={loading ? 'animate-spin' : ''} /> Refresh List
+        </button>
       </div>
 
-      {/* Lost Items Table */}
-      <section className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-lg">
-        <div className="bg-zinc-950 p-4 border-b border-zinc-800">
-          <h3 className="text-xl font-bold text-accent">Lost Items</h3>
+      {/* Controls */}
+      <div className="glass-card p-4 flex flex-col md:flex-row shadow-lg gap-4">
+        <div className="flex-1 relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={20} />
+          <input 
+            type="text" 
+            placeholder="Search items by name or location..." 
+            className="w-full pl-12 pr-4 py-3 bg-zinc-100 dark:bg-dark-700 border-none rounded-xl focus:ring-2 focus:ring-usa-maroon dark:focus:ring-usa-gold transition-all"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-zinc-900/50 border-b border-zinc-800">
-              <tr>
-                <th className="p-4 text-zinc-400 font-medium">Item Name</th>
-                <th className="p-4 text-zinc-400 font-medium">Date Lost</th>
-                <th className="p-4 text-zinc-400 font-medium">Place Lost</th>
-                <th className="p-4 text-zinc-400 font-medium">Reported By</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-800/50">
-              {lostItems.map(item => (
-                <tr key={item.id} className="hover:bg-zinc-800/50 transition-colors">
-                  <td className="p-4 text-zinc-200">{item.item_name}</td>
-                  <td className="p-4 text-zinc-400">{new Date(item.date_lost).toLocaleDateString()}</td>
-                  <td className="p-4 text-zinc-400">{item.place_lost}</td>
-                  <td className="p-4 text-zinc-400">{item.reported_by}</td>
-                </tr>
-              ))}
-              {lostItems.length === 0 && (
-                <tr>
-                  <td colSpan="4" className="p-4 text-zinc-500 text-center">No lost items reported.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        
+        <div className="flex bg-zinc-100 dark:bg-dark-700 p-1 rounded-xl">
+          <button 
+            onClick={() => setActiveTab('lost')}
+            className={`px-8 py-2 rounded-lg font-bold text-sm transition-all ${
+              activeTab === 'lost' 
+                ? 'bg-usa-maroon text-white shadow-md' 
+                : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+            }`}
+          >
+            Lost
+          </button>
+          <button 
+            onClick={() => setActiveTab('found')}
+            className={`px-8 py-2 rounded-lg font-bold text-sm transition-all ${
+              activeTab === 'found' 
+                ? 'bg-usa-gold text-usa-maroon shadow-md' 
+                : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+            }`}
+          >
+            Found
+          </button>
         </div>
-      </section>
+      </div>
 
-      {/* Found Items Table */}
-      <section className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-lg">
-        <div className="bg-zinc-950 p-4 border-b border-zinc-800">
-          <h3 className="text-xl font-bold text-emerald-500">Found Items</h3>
+      {/* Grid */}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="glass-card h-80 animate-pulse bg-zinc-200/50 dark:bg-dark-800/50 rounded-2xl" />
+          ))}
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-zinc-900/50 border-b border-zinc-800">
-              <tr>
-                <th className="p-4 text-zinc-400 font-medium">Item Name</th>
-                <th className="p-4 text-zinc-400 font-medium">Date Found</th>
-                <th className="p-4 text-zinc-400 font-medium">Location Found</th>
-                <th className="p-4 text-zinc-400 font-medium">Turned In By</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-800/50">
-              {foundItems.map(item => (
-                <tr key={item.id} className="hover:bg-zinc-800/50 transition-colors">
-                  <td className="p-4 text-zinc-200">{item.item_name}</td>
-                  <td className="p-4 text-zinc-400">{new Date(item.date_found).toLocaleDateString()}</td>
-                  <td className="p-4 text-zinc-400">{item.location_found}</td>
-                  <td className="p-4 text-zinc-400">{item.turned_in_by}</td>
-                </tr>
-              ))}
-              {foundItems.length === 0 && (
-                <tr>
-                  <td colSpan="4" className="p-4 text-zinc-500 text-center">No found items reported.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+      ) : filteredItems.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredItems.map(item => (
+            <div key={item.id} className="animate-fade-in">
+              <ItemCard item={item} type={item.type} />
+            </div>
+          ))}
         </div>
-      </section>
-
+      ) : (
+        <div className="glass-card py-20 flex flex-col items-center justify-center text-center">
+          <div className="bg-zinc-100 dark:bg-dark-700 p-6 rounded-full mb-6">
+            <PackageSearch size={64} className="text-zinc-400" />
+          </div>
+          <h3 className="text-2xl font-bold dark:text-white">No items found</h3>
+          <p className="mt-2 text-zinc-500 dark:text-zinc-400 max-w-sm">
+            Try adjusting your search or filters to find what you're looking for.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,21 +1,65 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  body {
-    @apply bg-zinc-950 text-zinc-100;
+@theme {
+  --color-usa-maroon: #800000;
+  --color-usa-gold: #FFD700;
+  --color-dark-900: #121212;
+  --color-dark-800: #1e1e1e;
+  --color-dark-700: #2d2d2d;
+  
+  --font-inter: "Inter", sans-serif;
+  
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-slide-up: slideUp 0.5s ease-out;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
 }
 
-.nav-link {
-  @apply flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200;
+@layer base {
+  body {
+    @apply bg-zinc-50 text-zinc-900 transition-colors duration-300;
+    font-family: var(--font-inter);
+  }
+
+  .dark body {
+    @apply bg-dark-900 text-zinc-100;
+  }
 }
 
-.nav-link.active {
-  @apply bg-accent/20 text-accent border-r-4 border-accent;
+@layer components {
+  .btn-primary {
+    @apply bg-usa-maroon text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-900 transition-all shadow-md active:scale-95 cursor-pointer;
+  }
+  
+  .btn-secondary {
+    @apply bg-usa-gold text-usa-maroon px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-all shadow-md active:scale-95 cursor-pointer;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl;
+  }
+
+  .dark .glass-card {
+    @apply bg-dark-800/80 border-dark-700/50;
+  }
 }
 
-.nav-link:hover:not(.active) {
-  @apply bg-zinc-900;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-usa-maroon/20 rounded-full hover:bg-usa-maroon/40 transition-colors;
 }
