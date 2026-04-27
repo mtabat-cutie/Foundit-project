@@ -1,0 +1,9 @@
+{
+  "name": "foundit-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install": "cd foundit-frontend && npm install",
+    "build": "cd foundit-frontend && npm run build"
+  }
+}

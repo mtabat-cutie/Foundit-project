@@ -117,7 +117,7 @@ export default function Header() {
                 <ChevronDown size={14} className={`text-white transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
               </button>
 
-              {{/* User Menu Dropdown Content remains mostly same but styles refined */}}
+              {/* User Menu Dropdown Content remains mostly same but styles refined */}
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-3 w-64 bg-white dark:bg-dark-800 rounded-xl shadow-2xl border border-zinc-100 dark:border-dark-700 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                   <div className="p-4 bg-usa-maroon/5 border-b border-zinc-100 dark:border-dark-700">
